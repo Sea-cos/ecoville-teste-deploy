@@ -24,28 +24,28 @@ public class SolicitacaoColetaController {
     }
 
     @GetMapping("/minhas")
-    public ResponseEntity<List<SolicitacaoColeta>> listarMinhas(@RequestParam Long usuarioId) {
+    public ResponseEntity<List<SolicitacaoColetaResponseDto>> listarMinhas(@RequestParam Long usuarioId) {
         return ResponseEntity.ok(solicitacaoService.listarMinhasSolicitacoes(usuarioId));
     }
 
     @PatchMapping("/{id}/aceitar")
-    public ResponseEntity<SolicitacaoColeta> aceitar(@PathVariable Integer id,
+    public ResponseEntity<SolicitacaoColetaResponseDto> aceitar(@PathVariable Integer id,
                                                      @RequestParam Integer coletorId) {
         return ResponseEntity.ok(solicitacaoService.aceitarSolicitacao(id, coletorId));
     }
 
     @PatchMapping("/{id}/cancelar")
-    public ResponseEntity<SolicitacaoColeta> cancelar(@PathVariable Integer id) {
+    public ResponseEntity<SolicitacaoColetaResponseDto> cancelar(@PathVariable Integer id) {
         return ResponseEntity.ok(solicitacaoService.cancelarSolicitacao(id));
     }
 
     @PatchMapping("/{id}/finalizar")
-    public ResponseEntity<SolicitacaoColeta> finalizar(@PathVariable Integer id) {
+    public ResponseEntity<SolicitacaoColetaResponseDto> finalizar(@PathVariable Integer id) {
         return ResponseEntity.ok(solicitacaoService.finalizarSolicitacao(id));
     }
 
     @PatchMapping("/{id}/feedback")
-    public ResponseEntity<SolicitacaoColeta> feedback(@PathVariable Integer id,
+    public ResponseEntity<SolicitacaoColetaResponseDto> feedback(@PathVariable Integer id,
                                                       @RequestParam String feedback) {
         return ResponseEntity.ok(solicitacaoService.adicionarFeedback(id, feedback));
     }

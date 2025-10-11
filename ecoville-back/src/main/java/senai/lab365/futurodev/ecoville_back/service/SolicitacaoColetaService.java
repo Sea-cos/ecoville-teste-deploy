@@ -10,13 +10,13 @@ public interface SolicitacaoColetaService {
 
     public SolicitacaoColetaResponseDto criarSolicitacao(Integer usuarioId, SolicitacaoColetaRequestDto dto);
 
-    public List<SolicitacaoColeta> listarMinhasSolicitacoes(Long usuarioId);
+    public List<SolicitacaoColetaResponseDto> listarMinhasSolicitacoes(Long usuarioId);
 
-    public SolicitacaoColeta aceitarSolicitacao(Integer idSolicitacao, Integer coletorId);
+    public SolicitacaoColetaResponseDto aceitarSolicitacao(Integer idSolicitacao, Integer coletorId);
 
-    public SolicitacaoColeta cancelarSolicitacao(Integer idSolicitacao);
+    public SolicitacaoColetaResponseDto cancelarSolicitacao(Integer idSolicitacao);
 
-    public SolicitacaoColeta finalizarSolicitacao(Integer idSolicitacao);
+    public SolicitacaoColetaResponseDto finalizarSolicitacao(Integer idSolicitacao);
 
-    public SolicitacaoColeta adicionarFeedback(Integer idSolicitacao, String feedback) ;
+    public SolicitacaoColetaResponseDto adicionarFeedback(Integer idSolicitacao, String feedback) ;
 }

@@ -53,43 +53,43 @@ public SolicitacaoColetaResponseDto criarSolicitacao(Integer usuarioId, Solicita
 
     solicitacao.setItems(itens);
 
-    // Graças ao cascade, isso já salva os itens junto
+    // Cascade já salva os itens junto
     return SolicitacaoColetaMapper.toDto(solicitacaoRepository.save(solicitacao));
 }
 
-    public List<SolicitacaoColeta> listarMinhasSolicitacoes(Long usuarioId) {
-        return solicitacaoRepository.findByUsuarioResidencialId(usuarioId);
+    public List<SolicitacaoColetaResponseDto> listarMinhasSolicitacoes(Long usuarioId) {
+        return solicitacaoRepository.findByUsuarioResidencialId(usuarioId).stream().map(SolicitacaoColetaMapper::toDto).toList();
     }
 
     @Transactional
-    public SolicitacaoColeta aceitarSolicitacao(Integer idSolicitacao, Integer coletorId) {
+    public SolicitacaoColetaResponseDto aceitarSolicitacao(Integer idSolicitacao, Integer coletorId) {
         SolicitacaoColeta solicitacao = solicitacaoRepository.findById(idSolicitacao)
                 .orElseThrow(() -> new RuntimeException("Solicitação não encontrada."));
         solicitacao.aceitar(usuarioRepository.getReferenceById(coletorId));
-        return solicitacaoRepository.save(solicitacao);
+        return SolicitacaoColetaMapper.toDto(solicitacaoRepository.save(solicitacao));
     }
 
     @Transactional
-    public SolicitacaoColeta cancelarSolicitacao(Integer idSolicitacao) {
+    public SolicitacaoColetaResponseDto cancelarSolicitacao(Integer idSolicitacao) {
         SolicitacaoColeta solicitacao = solicitacaoRepository.findById(idSolicitacao)
                 .orElseThrow(() -> new RuntimeException("Solicitação não encontrada."));
         solicitacao.cancelar();
-        return solicitacaoRepository.save(solicitacao);
+        return SolicitacaoColetaMapper.toDto(solicitacaoRepository.save(solicitacao));
     }
 
     @Transactional
-    public SolicitacaoColeta finalizarSolicitacao(Integer idSolicitacao) {
+    public SolicitacaoColetaResponseDto finalizarSolicitacao(Integer idSolicitacao) {
         SolicitacaoColeta solicitacao = solicitacaoRepository.findById(idSolicitacao)
                 .orElseThrow(() -> new RuntimeException("Solicitação não encontrada."));
         solicitacao.finalizar();
-        return solicitacaoRepository.save(solicitacao);
+        return SolicitacaoColetaMapper.toDto(solicitacaoRepository.save(solicitacao));
     }
 
     @Transactional
-    public SolicitacaoColeta adicionarFeedback(Integer idSolicitacao, String feedback) {
+    public SolicitacaoColetaResponseDto adicionarFeedback(Integer idSolicitacao, String feedback) {
         SolicitacaoColeta solicitacao = solicitacaoRepository.findById(idSolicitacao)
                 .orElseThrow(() -> new RuntimeException("Solicitação não encontrada."));
         solicitacao.adicionarFeedback(feedback);
-        return solicitacaoRepository.save(solicitacao);
+        return SolicitacaoColetaMapper.toDto(solicitacaoRepository.save(solicitacao));
     }
 }
