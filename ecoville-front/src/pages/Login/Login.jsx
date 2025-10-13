@@ -28,7 +28,7 @@ function LoginPage() {
 
       if (response.ok) {
         toast.success("Login realizado com sucesso");
-        console.log(data);
+        console.log(response);
         localStorage.setItem("tipoPerfil", data.perfil);
         navigate("/home");
       } else {
