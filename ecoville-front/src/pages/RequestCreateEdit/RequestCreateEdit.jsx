@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { Add, Remove } from "@mui/icons-material";
+import { ToastContainer, toast } from "react-toastify";
 import "./RequestCreateEdit.css";
 
 export default function RequestCreateEdit() {
   const [materiais, setMateriais] = useState([
-    { tipo: "Plástico", quantidade: 0 },
-    { tipo: "Papel", quantidade: 0 },
-    { tipo: "Vidro", quantidade: 0 },
-    { tipo: "Metal", quantidade: 0 },
+    { tipo: "PLASTICO", quantidade: 0 },
+    { tipo: "VIDRO", quantidade: 0 },
+    { tipo: "PAPEL", quantidade: 0 },
+    { tipo: "METAL", quantidade: 0 },
   ]);
 
   const [dataColeta, setDataColeta] = useState("");
@@ -32,15 +33,79 @@ export default function RequestCreateEdit() {
     setMateriais(novosMateriais);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const hoje = new Date().toISOString().split("T")[0];
+    const dataSelecionada = new Date(dataColeta).toISOString().split("T")[0];
+
+    if (dataSelecionada < hoje) {
+      toast.warning("A data da coleta deve ser hoje ou uma data futura.");
+      return;
+    }
+
+    const temMaterialValido = materiais.some((mat) => mat.quantidade >= 1);
+
+    if (!temMaterialValido) {
+      toast.warning(
+        "Selecione pelo menos um material com quantidade maior ou igual a 1."
+      );
+      return;
+    }
+
+    const faltandoEstado = materiais.some(
+      (mat) => mat.quantidade > 0 && !mat.estado
+    );
+    if (faltandoEstado) {
+      toast.warning(
+        "Selecione o estado para todos os materiais com quantidade preenchida."
+      );
+      return;
+    }
+
+    const itens = materiais
+      .filter((mat) => mat.quantidade > 0)
+      .map((mat) => ({
+        tipo: mat.tipo,
+        quantidadeEstimadaKg: mat.quantidade,
+        estado: mat.estado,
+      }));
+
     const dadosSolicitacao = {
-      materiais,
-      dataColeta,
-      observacao,
+      dataAgendada: dataColeta,
+      observacoes: observacao,
+      itens,
     };
-    console.log("Solicitação enviada:", dadosSolicitacao);
-    alert("Solicitação enviada com sucesso!");
+
+    console.log(dadosSolicitacao);
+
+    //TODO: Implementar JWT (issue #17)
+    const usuarioId = localStorage.getItem("usuarioID") || "6";
+    const user = localStorage.getItem("user") || "marcos";
+    const senha = localStorage.getItem("senha") || "123";
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/coletas?usuarioId=${usuarioId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Basic " + btoa(user + ":" + senha),
+          },
+          body: JSON.stringify(dadosSolicitacao),
+        }
+      );
+
+      if (response.ok) {
+        toast.success("Solicitação registrada!");
+      } else {
+        const errorText = await response.text();
+        toast.error("Erro: " + errorText);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -67,26 +132,26 @@ export default function RequestCreateEdit() {
                   <Add />
                 </button>
               </div>
-{/* Estado dos materiais */}
-       <div className="estado">
+              {/* Estado dos materiais */}
+              <div className="estado">
                 <p>Estado dos materiais:</p>
                 <label>
                   <input
                     type="radio"
                     name={`estado-${index}`}
-                    value="Novo"
-                    checked={material.estado === "Novo"}
-                    onChange={() => atualizarEstado(index, "Novo")}
+                    value="RUIM"
+                    checked={material.estado === "RUIM"}
+                    onChange={(e) => atualizarEstado(index, e.target.value)}
                   />
-                  Novo
+                  Ruim
                 </label>
-                <label> 
+                <label>
                   <input
                     type="radio"
                     name={`estado-${index}`}
-                    value="Bom"
-                    checked={material.estado === "Bom"}
-                    onChange={() => atualizarEstado(index, "Bom")}
+                    value="BOM"
+                    checked={material.estado === "BOM"}
+                    onChange={(e) => atualizarEstado(index, e.target.value)}
                   />
                   Bom
                 </label>
@@ -94,9 +159,9 @@ export default function RequestCreateEdit() {
                   <input
                     type="radio"
                     name={`estado-${index}`}
-                    value="Ótimo"
-                    checked={material.estado === "Ótimo"}
-                    onChange={() => atualizarEstado(index, "Ótimo")}
+                    value="OTIMO"
+                    checked={material.estado === "OTIMO"}
+                    onChange={(e) => atualizarEstado(index, e.target.value)}
                   />
                   Ótimo
                 </label>

@@ -47,6 +47,7 @@ public SolicitacaoColetaResponseDto criarSolicitacao(Integer usuarioId, Solicita
             item.setTipo(itemColetaDTO.tipo());
             item.setQuantidadeEstimadaKg(itemColetaDTO.quantidadeEstimadaKg());
             item.setSolicitacaoColeta(solicitacao);
+            item.setEstado(itemColetaDTO.estado());
             itens.add(item);
         }
     }
