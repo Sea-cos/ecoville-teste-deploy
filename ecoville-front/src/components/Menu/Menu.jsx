@@ -6,7 +6,7 @@ const Menu = () => {
   const navigate = useNavigate();
   const [perfil, setPerfil] = useState("");
   const handleLogout = () => {
-    localStorage.removeItem("usuarioID");
+    localStorage.removeItem("tipoPerfil");
     navigate("/");
   };
 
