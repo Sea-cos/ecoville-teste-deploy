@@ -25,6 +25,7 @@ public class Usuario {
     private String senha;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Perfil perfil = Perfil.RESIDENCIAL;
 
     @OneToOne
