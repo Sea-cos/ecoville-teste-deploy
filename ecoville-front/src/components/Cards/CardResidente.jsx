@@ -36,8 +36,8 @@ function CardResidente({ solicitacao, onCancelar, onEditar, onFeedback }) {
       ? `Coletado em ${dataColeta.toLocaleDateString("pt-BR")}`
       : dataColeta.toLocaleDateString("pt-BR");
 
-  const handleDeleteClick = () => {
-    if (window.confirm(`Deseja realmente deletar "${solicitacao.nome}"?`)) {
+  const handleCancelarClick = () => {
+    if (window.confirm(`Deseja realmente cancelar a solicitação ${solicitacao.id}?`)) {
       onCancelar(solicitacao.id);
     }
   };
@@ -79,7 +79,7 @@ function CardResidente({ solicitacao, onCancelar, onEditar, onFeedback }) {
             </button>
             <button
               className="delete-btn"
-              onClick={() => onCancelar(solicitacao.id)}
+              onClick={handleCancelarClick}
             >
               Cancelar
             </button>
