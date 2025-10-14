@@ -1,0 +1,31 @@
+.filtros {
+  display: flex;
+  gap: 1rem;              /* espaço entre os campos */
+  margin: 1rem 0 2rem;    /* espaçamento em relação ao topo e cards */
+  align-items: center;    /* centraliza verticalmente */
+  justify-content: flex-start; /* mantém alinhado à esquerda */
+}
+
+.filtros select,
+.filtros input[type="date"] {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;       /* borda leve */
+  border-radius: 6px;           /* cantos arredondados */
+  font-size: 0.95rem;
+  background-color: #fff;
+  color: #333;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filtros select:focus,
+.filtros input[type="date"]:focus {
+  border-color: #2e7d32;        /* verde para combinar com tema de reciclagem */
+  box-shadow: 0 0 4px rgba(46, 125, 50, 0.4);
+  outline: none;
+}
+
+.filtros label {
+  font-weight: 500;
+  margin-right: 0.5rem;
+  color: #444;
+}
