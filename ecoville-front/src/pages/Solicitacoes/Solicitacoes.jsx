@@ -7,60 +7,7 @@ import { useNavigate } from "react-router";
 import CardResidente from "../../components/Cards/CardResidente.jsx";
 
 const Solicitacoes = () => {
-  const solicitacoesExemplo = [
-    {
-      id: 1,
-      numeroSolicitacao: 1023,
-      itens: {
-        plastico: "12kg",
-        papel: "5kg",
-        vidro: "8kg",
-      },
-      dataColeta: "2025-10-07",
-      status: "AGUARDANDO",
-    },
-    {
-      id: 2,
-      numeroSolicitacao: 1024,
-      itens: {
-        metal: "3kg",
-        vidro: "10kg",
-      },
-      dataColeta: "2025-10-02",
-      status: "COLETADA",
-    },
-    {
-      id: 3,
-      numeroSolicitacao: 1025,
-      itens: {
-        organico: "20kg",
-      },
-      dataColeta: "2025-09-28",
-      status: "FINALIZADA",
-    },
-    {
-      id: 4,
-      numeroSolicitacao: 1026,
-      itens: {
-        plastico: "7kg",
-        papel: "2kg",
-      },
-      dataColeta: "2025-10-12",
-      status: "AGUARDANDO",
-    },
-    {
-      id: 5,
-      numeroSolicitacao: 1027,
-      itens: {
-        eletronicos: "4kg",
-        vidro: "6kg",
-      },
-      dataColeta: "2025-10-05",
-      status: "COLETADA",
-    },
-  ];
-
-  const [coletas, setColetas] = useState([]);
+  const [solicitacoes, setSolicitacoes] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [feedbackText, setFeedbackText] = useState(
     "Teste de feedback retornado pelo back-end"
@@ -78,9 +25,14 @@ const Solicitacoes = () => {
   };
 
   const handleFeedback = (id) => {
-    console.log("Feedback da solicitação", id);
-    setSelectedId(id);
-    setOpenModal(true);
+    const solicitacao = solicitacoes.find((s) => s.id === id);
+
+    if (solicitacao) {
+      console.log("Feedback da solicitação:", solicitacao.feedback);
+      setSelectedId(id);
+      setFeedbackText(solicitacao.feedback || "Sem feedback disponível");
+      setOpenModal(true);
+    }
   };
 
   const closeModal = () => {
@@ -95,34 +47,43 @@ const Solicitacoes = () => {
     navigate("/cadastro-coleta");
   };
 
-  /* TODO: Implementar busca de solicitações
   const fetchColetas = async () => {
+    const userID = localStorage.getItem("userID");
+    const user = localStorage.getItem("user") || "marcos";
+    const senha = localStorage.getItem("senha") || "123";
+
     try {
-      const userID = localStorage.getItem("tipoPerfil");
-      const res = await fetch("http://localhost:3000/coletas", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          usuarioId: userID,
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/coletas/minhas?usuarioId=${userID}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Basic " + btoa(user + ":" + senha),
+          },
+        }
+      );
 
-      if (!res.ok) throw new Error("Erro ao buscar coletas");
-      const data = await res.json();
-      if (data.length === 0) {
-        toast.warning("Nenhum ponto encontrado!");
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setSolicitacoes(data);
+        return data;
+      } else {
+        const errorText = await response.text();
+        console.warn("erro: ", errorText);
+        return [];
       }
-
-      setColetas(data);
-    } catch (err) {
-      toast.error(`Erro ao buscar coletas: ${err.message}`);
+    } catch (error) {
+      console.error("Erro de rede: ", error);
+      return [];
     }
   };
 
   useEffect(() => {
     fetchColetas();
   }, []);
-*/
+
   return (
     <>
       <Menu />
@@ -133,15 +94,21 @@ const Solicitacoes = () => {
         </button>
 
         <div className="div-cards">
-          {solicitacoesExemplo.map((sol) => (
-            <CardResidente
-              key={sol.id}
-              solicitacao={sol}
-              onCancelar={(id) => handleCancelar(id)}
-              onEditar={(id) => handleEditar(id)}
-              onFeedback={(id) => handleFeedback(sol.numeroSolicitacao)}
-            />
-          ))}
+          {solicitacoes
+            .slice()
+            .sort(
+              (a, b) =>
+                new Date(b.dataSolicitacao) - new Date(a.dataSolicitacao)
+            )
+            .map((sol) => (
+              <CardResidente
+                key={sol.id}
+                solicitacao={sol}
+                onCancelar={(id) => handleCancelar(id)}
+                onEditar={(id) => handleEditar(id)}
+                onFeedback={handleFeedback}
+              />
+            ))}
           {openModal && (
             <div className="overlay">
               <div className="modal">

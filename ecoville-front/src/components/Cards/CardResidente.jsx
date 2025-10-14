@@ -13,20 +13,33 @@ function CardResidente({ solicitacao, onCancelar, onEditar, onFeedback }) {
     const [ano, mes, dia] = dateString.split("-");
     return new Date(ano, mes - 1, dia);
   };
-  const dataColeta = parseDateLocal(solicitacao.dataColeta);
+  const dataColeta = parseDateLocal(solicitacao.dataAgendada);
   const hoje = new Date();
 
   const diffDias = Math.ceil((dataColeta - hoje) / (1000 * 60 * 60 * 24));
 
-  const indicadorTempo =
-    diffDias > 0
-      ? `Daqui a ${diffDias} dia${diffDias > 1 ? "s" : ""}`
-      : `Há ${Math.abs(diffDias)} dia${Math.abs(diffDias) > 1 ? "s" : ""}`;
+  let indicadorTempo;
+  if (diffDias === 0) {
+    indicadorTempo = "Hoje";
+  } else if (diffDias > 0) {
+    indicadorTempo = `Daqui a ${diffDias} dia${diffDias > 1 ? "s" : ""}`;
+  } else {
+    indicadorTempo = `Há ${Math.abs(diffDias)} dia${
+      Math.abs(diffDias) > 1 ? "s" : ""
+    }`;
+  }
 
   const textoData =
     dataColeta >= hoje
       ? `Agendado para ${dataColeta.toLocaleDateString("pt-BR")}`
       : `Coletado em ${dataColeta.toLocaleDateString("pt-BR")}`;
+
+  const textoDataTeste =
+    solicitacao.status === "AGUARDANDO"
+      ? `Agendado para ${dataColeta.toLocaleDateString("pt-BR")}`
+      : solicitacao.status === "COLETADA"
+      ? `Coletado em ${dataColeta.toLocaleDateString("pt-BR")}`
+      : dataColeta.toLocaleDateString("pt-BR"); // fallback se vier outro status
 
   const handleDeleteClick = () => {
     if (window.confirm(`Deseja realmente deletar "${solicitacao.nome}"?`)) {
@@ -36,25 +49,23 @@ function CardResidente({ solicitacao, onCancelar, onEditar, onFeedback }) {
 
   return (
     <div className="cards">
-      <h3 className="cards-title">
-        Solicitação #{solicitacao.numeroSolicitacao}
-      </h3>
+      <h3 className="cards-title">Solicitação #{solicitacao.id} ({solicitacao.status})</h3>
 
       <p className="cards-info">
         <FaClipboardList className="icon" />
         <strong>Itens:</strong>
       </p>
       <ul>
-        {Object.entries(solicitacao.itens).map(([item, quantidade]) => (
-          <li key={item}>
-            {item.charAt(0).toUpperCase() + item.slice(1)}: {quantidade}
+        {solicitacao.itens.map((item) => (
+          <li key={item.id}>
+            {item.tipo}: {item.quantidadeEstimadaKg}kg
           </li>
         ))}
       </ul>
 
       <p className="cards-info">
         <FaCalendarAlt className="icon" />
-        <strong>{textoData}</strong>
+        <strong>{textoDataTeste}</strong>
       </p>
 
       <p className="cards-indicador">
@@ -65,14 +76,29 @@ function CardResidente({ solicitacao, onCancelar, onEditar, onFeedback }) {
       <div className="card-actions">
         {solicitacao.status === "AGUARDANDO" && (
           <>
-            <button className="btn-card" onClick={() => onEditar(solicitacao.id)}>Editar</button>
-            <button className="delete-btn" onClick={() => onCancelar(solicitacao.id)}>Cancelar</button>
+            <button
+              className="btn-card"
+              onClick={() => onEditar(solicitacao.id)}
+            >
+              Editar
+            </button>
+            <button
+              className="delete-btn"
+              onClick={() => onCancelar(solicitacao.id)}
+            >
+              Cancelar
+            </button>
           </>
         )}
 
         {(solicitacao.status === "COLETADA" ||
           solicitacao.status === "FINALIZADA") && (
-          <button className="btn-card" onClick={() => onFeedback(solicitacao.id)}>Feedback</button>
+          <button
+            className="btn-card"
+            onClick={() => onFeedback(solicitacao.id)}
+          >
+            Feedback
+          </button>
         )}
       </div>
     </div>
