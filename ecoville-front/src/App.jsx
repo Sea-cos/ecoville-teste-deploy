@@ -21,6 +21,7 @@ function App() {
         <Route path="/criar-conta" Component={Register} />
         <Route path="/home" Component={Home} />
         <Route path="/cadastro-coleta" Component={CadastroColeta} />
+        <Route path="/cadastro-coleta/:id" element={<CadastroColeta />} />
         <Route path="/solicitacoes" Component={Solicitacoes} />
         <Route path="/coletas" Component={Coletas} />
         <Route path="/locais" Component={Places} />
