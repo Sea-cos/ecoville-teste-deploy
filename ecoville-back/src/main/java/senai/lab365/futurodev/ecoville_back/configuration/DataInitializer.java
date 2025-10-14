@@ -1,4 +1,4 @@
-package senai.lab365.futurodev.ecoville_back.config;
+package senai.lab365.futurodev.ecoville_back.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import CardResidente from "../../components/Cards/CardResidente.jsx";
 
 const Solicitacoes = () => {
+  const navigate = useNavigate();
   const [solicitacoes, setSolicitacoes] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const userID = localStorage.getItem("userID");
@@ -44,8 +45,7 @@ const Solicitacoes = () => {
   };
 
   const handleEditar = (id) => {
-    console.log("Editar solicitação", id);
-    // TODO: Implementar edição, modal ou nova tela (issue #12)
+    navigate(`/cadastro-coleta/${id}`);
   };
 
   const handleFeedback = (id) => {
@@ -64,8 +64,6 @@ const Solicitacoes = () => {
     setFeedbackText("");
     setSelectedId(null);
   };
-
-  const navigate = useNavigate();
 
   const cadastrar = () => {
     navigate("/cadastro-coleta");
@@ -125,7 +123,7 @@ const Solicitacoes = () => {
                 key={sol.id}
                 solicitacao={sol}
                 onCancelar={(id) => handleCancelar(id)}
-                onEditar={(id) => handleEditar(id)}
+                onEditar={handleEditar}
                 onFeedback={handleFeedback}
               />
             ))}
