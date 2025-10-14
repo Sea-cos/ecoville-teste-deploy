@@ -13,4 +13,5 @@ public class LoginResponseDto {
     private String message;
     private String username;
     private Perfil perfil;
+    private Integer id;
 }

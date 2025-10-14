@@ -92,7 +92,7 @@ const Solicitacoes = () => {
   const navigate = useNavigate();
 
   const cadastrar = () => {
-    navigate("/locais/novo");
+    navigate("/cadastro-coleta");
   };
 
   /* TODO: Implementar busca de solicitações

@@ -59,7 +59,14 @@ public class UsuarioServiceImpl implements UsuarioService {
                     new UsernamePasswordAuthenticationToken(dto.getNomeDeUsuario(), dto.getSenha())
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return new LoginResponseDto("Login realizado com sucesso!", dto.getNomeDeUsuario(),usuarioRepository.findByNomeDeUsuario(dto.getNomeDeUsuario()).get().getPerfil());
+
+            Usuario usuario = usuarioRepository.findByNomeDeUsuario(dto.getNomeDeUsuario())
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+            return new LoginResponseDto("Login realizado com sucesso!",
+                    dto.getNomeDeUsuario(),
+                    usuario.getPerfil(),
+                    usuario.getId());
         } catch (Exception e) {
             throw new BadCredentialsException("Usuário ou senha inválidos");
         }

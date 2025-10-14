@@ -30,6 +30,9 @@ function LoginPage() {
         toast.success("Login realizado com sucesso");
         console.log(response);
         localStorage.setItem("tipoPerfil", data.perfil);
+        localStorage.setItem("user", usuario);
+        localStorage.setItem("senha", senha);
+        localStorage.setItem("userID", data.id);
         navigate("/home");
       } else {
         toast.warning("Credenciais inválidas!!");

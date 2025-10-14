@@ -6,7 +6,7 @@ const Menu = () => {
   const navigate = useNavigate();
   const [perfil, setPerfil] = useState("");
   const handleLogout = () => {
-    localStorage.removeItem("tipoPerfil");
+    localStorage.clear();
     navigate("/");
   };
 
@@ -20,7 +20,7 @@ const Menu = () => {
       <ul className="nav-list">
         {perfil === "RESIDENCIAL" && (
           <li className="nav-item">
-            <Link to="/minhas-solicitacoes" className="nav-link">
+            <Link to="/solicitacoes" className="nav-link">
               Minhas Solicitações
             </Link>
           </li>
@@ -28,7 +28,7 @@ const Menu = () => {
 
         {perfil === "COLETOR" && (
           <li className="nav-item">
-            <Link to="/solicitacoes" className="nav-link">
+            <Link to="/coletas" className="nav-link">
               Solicitações
             </Link>
           </li>
