@@ -11,6 +11,7 @@ public interface SolicitacaoColetaService {
     public SolicitacaoColetaResponseDto criarSolicitacao(Integer usuarioId, SolicitacaoColetaRequestDto dto);
 
     public List<SolicitacaoColetaResponseDto> listarMinhasSolicitacoes(Long usuarioId);
+    public List<SolicitacaoColetaResponseDto> listarTodasSolicitacoes();
 
     public SolicitacaoColetaResponseDto aceitarSolicitacao(Integer idSolicitacao, Integer coletorId);
 

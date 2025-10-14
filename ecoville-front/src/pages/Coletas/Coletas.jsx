@@ -61,10 +61,11 @@ const Coletas = () => {
 
   const [statusFiltro, setStatusFiltro] = useState("");
   const [dataFiltro, setDataFiltro] = useState("");
+  const [solicitacoes, setSolicitacoes] = useState([]);
 
-  const solicitacoesFiltradas = solicitacoesExemplo.filter((sol) => {
+  const solicitacoesFiltradas = solicitacoes.filter((sol) => {
     const matchStatus = statusFiltro ? sol.status === statusFiltro : true;
-    const matchData = dataFiltro ? sol.dataColeta === dataFiltro : true;
+    const matchData = dataFiltro ? sol.dataAgendada === dataFiltro : true;
 
     return matchStatus && matchData;
   });
@@ -85,34 +86,44 @@ const Coletas = () => {
     navigate("/locais/novo");
   };
 
-  /* TODO: Implementar busca de solicitações
   const fetchColetas = async () => {
+    const userID = localStorage.getItem("userID");
+    const user = localStorage.getItem("user") || "marcos";
+    const senha = localStorage.getItem("senha") || "123";
+
     try {
-      const userID = localStorage.getItem("tipoPerfil");
-      const res = await fetch("http://localhost:3000/coletas", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          usuarioId: userID,
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/coletas/disponiveis`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Basic " + btoa(user + ":" + senha),
+          },
+        }
+      );
 
-      if (!res.ok) throw new Error("Erro ao buscar coletas");
-      const data = await res.json();
-      if (data.length === 0) {
-        toast.warning("Nenhum ponto encontrado!");
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setSolicitacoes(data);
+        return data;
+      } else {
+        const errorText = await response.text();
+        console.warn("erro: ", errorText);
+        return [];
       }
-
-      setColetas(data);
-    } catch (err) {
-      toast.error(`Erro ao buscar coletas: ${err.message}`);
+    } catch (error) {
+      console.error("Erro de rede: ", error);
+      return [];
     }
   };
 
   useEffect(() => {
     fetchColetas();
   }, []);
-*/
+
+
   return (
     <>
       <Menu />
@@ -128,6 +139,7 @@ const Coletas = () => {
             <option value="AGUARDANDO">Aguardando</option>
             <option value="COLETADA">Coletada</option>
             <option value="FINALIZADA">Finalizada</option>
+            <option value="CANCELADA">Cancelada</option>
           </select>
 
           <input

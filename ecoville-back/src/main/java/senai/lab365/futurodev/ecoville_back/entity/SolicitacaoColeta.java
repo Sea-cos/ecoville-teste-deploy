@@ -57,7 +57,8 @@ public class SolicitacaoColeta {
 
     public void aceitar(Usuario coletor) {
         this.coletor = coletor;
-        this.status = StatusColeta.ACEITA;
+        this.status = StatusColeta.COLETADA;
+        //alterei para coletada pois o aceita não é usado
     }
 
     public void cancelar() {

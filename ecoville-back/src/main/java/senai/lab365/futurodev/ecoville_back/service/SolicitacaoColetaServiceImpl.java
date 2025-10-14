@@ -62,6 +62,13 @@ public SolicitacaoColetaResponseDto criarSolicitacao(Integer usuarioId, Solicita
         return solicitacaoRepository.findByUsuarioResidencialId(usuarioId).stream().map(SolicitacaoColetaMapper::toDto).toList();
     }
 
+    public List<SolicitacaoColetaResponseDto> listarTodasSolicitacoes() {
+        return solicitacaoRepository.findAll()
+                .stream()
+                .map(SolicitacaoColetaMapper::toDto)
+                .toList();
+    }
+
     @Transactional
     public SolicitacaoColetaResponseDto aceitarSolicitacao(Integer idSolicitacao, Integer coletorId) {
         SolicitacaoColeta solicitacao = solicitacaoRepository.findById(idSolicitacao)

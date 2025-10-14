@@ -28,6 +28,12 @@ public class SolicitacaoColetaController {
         return ResponseEntity.ok(solicitacaoService.listarMinhasSolicitacoes(usuarioId));
     }
 
+    @GetMapping("/disponiveis")
+    public ResponseEntity<List<SolicitacaoColetaResponseDto>> listarTodasSolicitacoes() {
+        List<SolicitacaoColetaResponseDto> solicitacoes = solicitacaoService.listarTodasSolicitacoes();
+        return ResponseEntity.ok(solicitacoes);
+    }
+
     @PatchMapping("/{id}/aceitar")
     public ResponseEntity<SolicitacaoColetaResponseDto> aceitar(@PathVariable Integer id,
                                                      @RequestParam Integer coletorId) {

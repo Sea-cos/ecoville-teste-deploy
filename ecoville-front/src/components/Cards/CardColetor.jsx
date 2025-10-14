@@ -7,12 +7,12 @@ import {
 } from "react-icons/fa";
 
 function CardColetor({ solicitacao, onColetar, onValidar }) {
-  const dataColeta = new Date(solicitacao.dataColeta + "T00:00:00");
+  const dataColeta = new Date(solicitacao.dataAgendada + "T00:00:00");
 
   return (
     <div className="cards">
       <h3 className="cards-title">
-        Solicitação #{solicitacao.numeroSolicitacao}
+        Solicitação #{solicitacao.id}
       </h3>
 
       <p className="cards-info">
@@ -20,9 +20,9 @@ function CardColetor({ solicitacao, onColetar, onValidar }) {
         <strong>Itens:</strong>
       </p>
       <ul>
-        {Object.entries(solicitacao.itens).map(([item, quantidade]) => (
-          <li key={item}>
-            {item.charAt(0).toUpperCase() + item.slice(1)}: {quantidade}
+        {solicitacao.itens.map((item) =>(
+          <li key={item.id}>
+            {item.tipo}: {item.quantidadeEstimadaKg}kg
           </li>
         ))}
       </ul>
