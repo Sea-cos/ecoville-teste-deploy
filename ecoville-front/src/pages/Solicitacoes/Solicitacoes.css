@@ -1,0 +1,65 @@
+/* Fundo escuro atrás da modal */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* fundo semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* garante que fica acima do resto */
+}
+
+/* Caixa da modal */
+.modal {
+  background: #fff;
+  padding: 20px 25px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%; /* responsivo em telas menores */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Título da modal */
+.modal h2 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  color: #2e7d32; /* combina com o verde do seu tema */
+}
+
+/* Texto do feedback */
+.modal p {
+  margin: 15px 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Botão dentro da modal */
+.modal button {
+  background-color: #2e7d32;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.modal button:hover {
+  background-color: #1b5e20; /* verde mais escuro no hover */
+}
+
+/* Animação de entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

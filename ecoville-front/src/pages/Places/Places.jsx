@@ -1,7 +1,7 @@
 import Menu from "../../components/Menu/Menu.jsx";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import CardPonto from "../../components/Cards/CardPonto.jsx";
+import CardPonto from "../../components/Cards/CardResidente.jsx";
 import "./Places.css";
 import { useNavigate } from "react-router";
 
