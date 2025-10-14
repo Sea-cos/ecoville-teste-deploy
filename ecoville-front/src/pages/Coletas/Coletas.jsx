@@ -6,61 +6,11 @@ import { useNavigate } from "react-router";
 import CardColetor from "../../components/Cards/CardColetor.jsx";
 
 const Coletas = () => {
-  const solicitacoesExemplo = [
-    {
-      id: 1,
-      numeroSolicitacao: 1023,
-      itens: {
-        plastico: "12kg",
-        papel: "5kg",
-        vidro: "8kg",
-      },
-      dataColeta: "2025-10-07",
-      status: "AGUARDANDO",
-    },
-    {
-      id: 2,
-      numeroSolicitacao: 1024,
-      itens: {
-        metal: "3kg",
-        vidro: "10kg",
-      },
-      dataColeta: "2025-10-02",
-      status: "COLETADA",
-    },
-    {
-      id: 3,
-      numeroSolicitacao: 1025,
-      itens: {
-        organico: "20kg",
-      },
-      dataColeta: "2025-10-02",
-      status: "FINALIZADA",
-    },
-    {
-      id: 4,
-      numeroSolicitacao: 1026,
-      itens: {
-        plastico: "7kg",
-        papel: "2kg",
-      },
-      dataColeta: "2025-10-12",
-      status: "AGUARDANDO",
-    },
-    {
-      id: 5,
-      numeroSolicitacao: 1027,
-      itens: {
-        eletronicos: "4kg",
-        vidro: "6kg",
-      },
-      dataColeta: "2025-10-05",
-      status: "COLETADA",
-    },
-  ];
-
   const [statusFiltro, setStatusFiltro] = useState("");
   const [dataFiltro, setDataFiltro] = useState("");
+  const userID = localStorage.getItem("userID");
+  const user = localStorage.getItem("user") || "marcos";
+  const senha = localStorage.getItem("senha") || "123";
   const [solicitacoes, setSolicitacoes] = useState([]);
 
   const solicitacoesFiltradas = solicitacoes.filter((sol) => {
@@ -75,9 +25,30 @@ const Coletas = () => {
     // TODO: Implementar validação( issue #16)
   };
 
-  const handleColetar = (id) => {
-    console.log("Coletar solicitação", id);
-    // TODO: Implementar coletar ( issue #16)
+  const handleColetar = async (id) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/coletas/${id}/aceitar?coletorId=${userID}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Basic " + btoa(user + ":" + senha),
+          },
+        }
+      );
+
+      if (response.ok) {
+        const updated = await response.json();
+        toast.success("Solicitação coletada!");
+        setSolicitacoes((prev) => prev.map((s) => (s.id === id ? updated : s)));
+      } else {
+        const errorText = await response.text();
+        toast.warn("Erro ao cancelar: ", errorText);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const navigate = useNavigate();
@@ -87,10 +58,6 @@ const Coletas = () => {
   };
 
   const fetchColetas = async () => {
-    const userID = localStorage.getItem("userID");
-    const user = localStorage.getItem("user") || "marcos";
-    const senha = localStorage.getItem("senha") || "123";
-
     try {
       const response = await fetch(
         `http://localhost:8080/api/coletas/disponiveis`,
@@ -122,7 +89,6 @@ const Coletas = () => {
   useEffect(() => {
     fetchColetas();
   }, []);
-
 
   return (
     <>
