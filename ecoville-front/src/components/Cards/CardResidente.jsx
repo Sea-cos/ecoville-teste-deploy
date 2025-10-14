@@ -30,19 +30,14 @@ function CardResidente({ solicitacao, onCancelar, onEditar, onFeedback }) {
   }
 
   const textoData =
-    dataColeta >= hoje
-      ? `Agendado para ${dataColeta.toLocaleDateString("pt-BR")}`
-      : `Coletado em ${dataColeta.toLocaleDateString("pt-BR")}`;
-
-  const textoDataTeste =
     solicitacao.status === "AGUARDANDO"
       ? `Agendado para ${dataColeta.toLocaleDateString("pt-BR")}`
       : solicitacao.status === "COLETADA"
       ? `Coletado em ${dataColeta.toLocaleDateString("pt-BR")}`
-      : dataColeta.toLocaleDateString("pt-BR"); // fallback se vier outro status
+      : dataColeta.toLocaleDateString("pt-BR");
 
-  const handleDeleteClick = () => {
-    if (window.confirm(`Deseja realmente deletar "${solicitacao.nome}"?`)) {
+  const handleCancelarClick = () => {
+    if (window.confirm(`Deseja realmente cancelar a solicitação ${solicitacao.id}?`)) {
       onCancelar(solicitacao.id);
     }
   };
@@ -65,7 +60,7 @@ function CardResidente({ solicitacao, onCancelar, onEditar, onFeedback }) {
 
       <p className="cards-info">
         <FaCalendarAlt className="icon" />
-        <strong>{textoDataTeste}</strong>
+        <strong>{textoData}</strong>
       </p>
 
       <p className="cards-indicador">
@@ -84,7 +79,7 @@ function CardResidente({ solicitacao, onCancelar, onEditar, onFeedback }) {
             </button>
             <button
               className="delete-btn"
-              onClick={() => onCancelar(solicitacao.id)}
+              onClick={handleCancelarClick}
             >
               Cancelar
             </button>
