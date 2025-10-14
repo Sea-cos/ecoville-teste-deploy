@@ -3,13 +3,12 @@ package senai.lab365.futurodev.ecoville_back.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import senai.lab365.futurodev.ecoville_back.dtos.ItemColetaRequestDto;
-import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaRequestDto;
-import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaResponseDto;
+import senai.lab365.futurodev.ecoville_back.dtos.*;
 import senai.lab365.futurodev.ecoville_back.entity.ItemColeta;
 import senai.lab365.futurodev.ecoville_back.entity.SolicitacaoColeta;
 import senai.lab365.futurodev.ecoville_back.entity.Usuario;
 import senai.lab365.futurodev.ecoville_back.enums.StatusColeta;
+import senai.lab365.futurodev.ecoville_back.mappers.ItemColetaMapper;
 import senai.lab365.futurodev.ecoville_back.mappers.SolicitacaoColetaMapper;
 import senai.lab365.futurodev.ecoville_back.repository.SolicitacaoColetaRepository;
 import senai.lab365.futurodev.ecoville_back.repository.UsuarioRepository;
@@ -57,7 +56,7 @@ public SolicitacaoColetaResponseDto criarSolicitacao(Integer usuarioId, Solicita
     return SolicitacaoColetaMapper.toDto(solicitacaoRepository.save(solicitacao));
 }
 
-    public List<SolicitacaoColetaResponseDto> listarMinhasSolicitacoes(Long usuarioId) {
+    public List<SolicitacaoColetaResponseDto> listarMinhasSolicitacoes(Integer usuarioId) {
         return solicitacaoRepository.findByUsuarioResidencialId(usuarioId).stream().map(SolicitacaoColetaMapper::toDto).toList();
     }
 
@@ -91,5 +90,44 @@ public SolicitacaoColetaResponseDto criarSolicitacao(Integer usuarioId, Solicita
                 .orElseThrow(() -> new RuntimeException("Solicitação não encontrada."));
         solicitacao.adicionarFeedback(feedback);
         return SolicitacaoColetaMapper.toDto(solicitacaoRepository.save(solicitacao));
+    }
+
+    @Transactional
+    public SolicitacaoColetaUpdateResponseDto atualizar(Integer idSolicitacao, SolicitacaoColetaUpdateRequestDto dto) {
+        SolicitacaoColeta solicitacao = solicitacaoRepository.findById(idSolicitacao)
+                .orElseThrow();
+
+        solicitacao.setUsuarioResidencial(usuarioRepository.findById(dto.idUsuarioResidencial())
+                .orElseThrow(()->new RuntimeException("Usuario residencial não encontrado.")));
+        solicitacao.setColetor(usuarioRepository.findById(dto.idColetor())
+                .orElseThrow(()->new RuntimeException("Usuario coletor não encontrado.")));
+        solicitacao.setDataSolicitacao(dto.dataSolicitacao());
+        solicitacao.setDataAgendada(dto.dataAgendada());
+        solicitacao.setObservacoes(dto.observacoes());
+        solicitacao.setStatus(dto.status());
+        solicitacao.setFeedback(dto.feedback());
+
+
+        List<ItemColeta> itens = new ArrayList<>();
+
+        if (dto.itens() != null) {
+            for (ItemColetaRequestDto itemColetaDTO : dto.itens()) {
+                ItemColeta item = new ItemColeta();
+                item.setTipo(itemColetaDTO.tipo());
+                item.setQuantidadeEstimadaKg(itemColetaDTO.quantidadeEstimadaKg());
+                item.setQuantidadeValidadaKg(itemColetaDTO.quantidadeValidadaKg());
+                item.setEstado(itemColetaDTO.estado());
+                item.setSolicitacaoColeta(solicitacao);
+                itens.add(item);
+            }
+        }
+
+        solicitacao.getItems().clear();
+        solicitacao.getItems().addAll(itens);
+
+        solicitacao = solicitacaoRepository.save(solicitacao);
+
+        return SolicitacaoColetaMapper.toDtoUpdate(solicitacao);
+
     }
 }

@@ -1,9 +1,10 @@
-package senai.lab365.futurodev.ecoville_back.config;
+package senai.lab365.futurodev.ecoville_back.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import senai.lab365.futurodev.ecoville_back.entity.Endereco;
 import senai.lab365.futurodev.ecoville_back.entity.Usuario;
 import senai.lab365.futurodev.ecoville_back.enums.Perfil;

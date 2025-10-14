@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaRequestDto;
 import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaResponseDto;
+import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaUpdateRequestDto;
+import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaUpdateResponseDto;
 import senai.lab365.futurodev.ecoville_back.entity.SolicitacaoColeta;
 import senai.lab365.futurodev.ecoville_back.service.SolicitacaoColetaService;
 
@@ -24,8 +26,14 @@ public class SolicitacaoColetaController {
     }
 
     @GetMapping("/minhas")
-    public ResponseEntity<List<SolicitacaoColetaResponseDto>> listarMinhas(@RequestParam Long usuarioId) {
+    public ResponseEntity<List<SolicitacaoColetaResponseDto>> listarMinhas(@RequestParam Integer usuarioId) {
         return ResponseEntity.ok(solicitacaoService.listarMinhasSolicitacoes(usuarioId));
+    }
+
+    @PutMapping("/{idSolicitacao}")
+    public ResponseEntity<SolicitacaoColetaUpdateResponseDto> feedback(@PathVariable Integer idSolicitacao,
+                                                                       @RequestBody SolicitacaoColetaUpdateRequestDto dto) {
+        return ResponseEntity.ok(solicitacaoService.atualizar(idSolicitacao, dto));
     }
 
     @PatchMapping("/{id}/aceitar")
@@ -46,7 +54,7 @@ public class SolicitacaoColetaController {
 
     @PatchMapping("/{id}/feedback")
     public ResponseEntity<SolicitacaoColetaResponseDto> feedback(@PathVariable Integer id,
-                                                      @RequestParam String feedback) {
+                                                      @RequestBody String feedback) {
         return ResponseEntity.ok(solicitacaoService.adicionarFeedback(id, feedback));
     }
 }
