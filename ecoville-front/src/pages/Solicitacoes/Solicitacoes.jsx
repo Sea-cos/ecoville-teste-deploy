@@ -9,14 +9,38 @@ import CardResidente from "../../components/Cards/CardResidente.jsx";
 const Solicitacoes = () => {
   const [solicitacoes, setSolicitacoes] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const userID = localStorage.getItem("userID");
+  const user = localStorage.getItem("user") || "marcos";
+  const senha = localStorage.getItem("senha") || "123";
   const [feedbackText, setFeedbackText] = useState(
     "Teste de feedback retornado pelo back-end"
   );
   const [selectedId, setSelectedId] = useState(null);
 
-  const handleCancelar = (id) => {
-    console.log("Cancelar solicitação", id);
-    // TODO: Implementar cancelamento (issue #12)
+  const handleCancelar = async (id) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/coletas/${id}/cancelar`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Basic " + btoa(user + ":" + senha),
+          },
+        }
+      );
+
+      if (response.ok) {
+        const updated = await response.json();
+        toast.success("Solicitação cancelada!");
+        setSolicitacoes((prev) => prev.map((s) => (s.id === id ? updated : s))); //atualizar local para não ter que recarregar a pagina.
+      } else {
+        const errorText = await response.text();
+        toast.warn("Erro ao cancelar: ", errorText);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleEditar = (id) => {
@@ -48,10 +72,6 @@ const Solicitacoes = () => {
   };
 
   const fetchColetas = async () => {
-    const userID = localStorage.getItem("userID");
-    const user = localStorage.getItem("user") || "marcos";
-    const senha = localStorage.getItem("senha") || "123";
-
     try {
       const response = await fetch(
         `http://localhost:8080/api/coletas/minhas?usuarioId=${userID}`,
