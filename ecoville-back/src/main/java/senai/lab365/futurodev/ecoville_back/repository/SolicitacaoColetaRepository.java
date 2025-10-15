@@ -8,5 +8,5 @@ public interface SolicitacaoColetaRepository extends JpaRepository<SolicitacaoCo
 
 //    List<SolicitacaoColeta> findByIdUsuario(Long idUsuario);
 
-    List<SolicitacaoColeta> findByUsuarioResidencialId(Long idUsuario);
+    List<SolicitacaoColeta> findByUsuarioResidencialId(Integer idUsuario);
 }

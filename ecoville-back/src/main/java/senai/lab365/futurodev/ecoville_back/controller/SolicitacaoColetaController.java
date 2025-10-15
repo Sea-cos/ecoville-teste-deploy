@@ -5,6 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaRequestDto;
 import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaResponseDto;
+import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaUpdateRequestDto;
+import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaUpdateResponseDto;
+import senai.lab365.futurodev.ecoville_back.entity.SolicitacaoColeta;
 import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoValidacaoRequestDto;
 import senai.lab365.futurodev.ecoville_back.service.SolicitacaoColetaService;
 
@@ -24,7 +27,7 @@ public class SolicitacaoColetaController {
     }
 
     @GetMapping("/minhas")
-    public ResponseEntity<List<SolicitacaoColetaResponseDto>> listarMinhas(@RequestParam Long usuarioId) {
+    public ResponseEntity<List<SolicitacaoColetaResponseDto>> listarMinhas(@RequestParam Integer usuarioId) {
         return ResponseEntity.ok(solicitacaoService.listarMinhasSolicitacoes(usuarioId));
     }
 
@@ -32,6 +35,12 @@ public class SolicitacaoColetaController {
     public ResponseEntity<List<SolicitacaoColetaResponseDto>> listarTodasSolicitacoes() {
         List<SolicitacaoColetaResponseDto> solicitacoes = solicitacaoService.listarTodasSolicitacoes();
         return ResponseEntity.ok(solicitacoes);
+    }
+
+    @PutMapping("/{idSolicitacao}")
+    public ResponseEntity<SolicitacaoColetaUpdateResponseDto> feedback(@PathVariable Integer idSolicitacao,
+                                                                       @RequestBody SolicitacaoColetaUpdateRequestDto dto) {
+        return ResponseEntity.ok(solicitacaoService.atualizar(idSolicitacao, dto));
     }
 
     @PatchMapping("/{id}/aceitar")
