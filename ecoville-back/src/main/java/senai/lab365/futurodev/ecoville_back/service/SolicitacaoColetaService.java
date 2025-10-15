@@ -2,7 +2,7 @@ package senai.lab365.futurodev.ecoville_back.service;
 
 import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaRequestDto;
 import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaResponseDto;
-import senai.lab365.futurodev.ecoville_back.entity.SolicitacaoColeta;
+import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoValidacaoRequestDto;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface SolicitacaoColetaService {
 
     public SolicitacaoColetaResponseDto cancelarSolicitacao(Integer idSolicitacao);
 
-    public SolicitacaoColetaResponseDto finalizarSolicitacao(Integer idSolicitacao);
+    public SolicitacaoColetaResponseDto finalizarSolicitacao(Integer idSolicitacao, SolicitacaoValidacaoRequestDto validacaoDto);
 
     public SolicitacaoColetaResponseDto adicionarFeedback(Integer idSolicitacao, String feedback) ;
 }
