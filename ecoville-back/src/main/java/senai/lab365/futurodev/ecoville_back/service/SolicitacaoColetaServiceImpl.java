@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import senai.lab365.futurodev.ecoville_back.dtos.ItemColetaRequestDto;
+import senai.lab365.futurodev.ecoville_back.dtos.ItemColetaValidacaoRequestDto;
 import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaRequestDto;
 import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaResponseDto;
+import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoValidacaoRequestDto;
 import senai.lab365.futurodev.ecoville_back.entity.ItemColeta;
 import senai.lab365.futurodev.ecoville_back.entity.SolicitacaoColeta;
 import senai.lab365.futurodev.ecoville_back.entity.Usuario;
@@ -86,9 +88,19 @@ public SolicitacaoColetaResponseDto criarSolicitacao(Integer usuarioId, Solicita
     }
 
     @Transactional
-    public SolicitacaoColetaResponseDto finalizarSolicitacao(Integer idSolicitacao) {
+    public SolicitacaoColetaResponseDto finalizarSolicitacao(Integer idSolicitacao, SolicitacaoValidacaoRequestDto validacaoDto) {
         SolicitacaoColeta solicitacao = solicitacaoRepository.findById(idSolicitacao)
                 .orElseThrow(() -> new RuntimeException("Solicitação não encontrada."));
+
+        for (ItemColetaValidacaoRequestDto itemDto : validacaoDto.itens()){
+            solicitacao.getItems().stream()
+                    .filter(item -> item.getId().equals(itemDto.id()))
+                    .findFirst()
+                    .ifPresent(item -> {
+                        item.setQuantidadeValidadaKg(itemDto.quantidadeValidadaKg());
+                        item.setEstado(itemDto.estado());
+                    });
+        }
         solicitacao.finalizar();
         return SolicitacaoColetaMapper.toDto(solicitacaoRepository.save(solicitacao));
     }

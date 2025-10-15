@@ -2,6 +2,7 @@ package senai.lab365.futurodev.ecoville_back.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import java.time.LocalDate;
 import java.util.List;
 

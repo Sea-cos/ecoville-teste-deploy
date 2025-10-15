@@ -1,12 +1,7 @@
 package senai.lab365.futurodev.ecoville_back.mappers;
 
-import senai.lab365.futurodev.ecoville_back.dtos.ItemColetaRequestDto;
-import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaRequestDto;
 import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaResponseDto;
 import senai.lab365.futurodev.ecoville_back.entity.SolicitacaoColeta;
-
-import java.time.LocalDate;
-import java.util.List;
 
 public class SolicitacaoColetaMapper {
 

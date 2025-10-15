@@ -4,7 +4,7 @@ import senai.lab365.futurodev.ecoville_back.enums.EstadoMaterial;
 
 import java.math.BigDecimal;
 
-public record ItemColetaValidacaoDto(
+public record ItemColetaValidacaoRequestDto(
         Integer id,
         BigDecimal quantidadeValidadaKg,
         EstadoMaterial estado

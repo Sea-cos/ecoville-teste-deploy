@@ -22,8 +22,6 @@ import senai.lab365.futurodev.ecoville_back.entity.Usuario;
 import senai.lab365.futurodev.ecoville_back.repository.EnderecoRepository;
 import senai.lab365.futurodev.ecoville_back.repository.UsuarioRepository;
 
-import java.util.Base64;
-
 @Service
 @RequiredArgsConstructor
 public class UsuarioServiceImpl implements UsuarioService {

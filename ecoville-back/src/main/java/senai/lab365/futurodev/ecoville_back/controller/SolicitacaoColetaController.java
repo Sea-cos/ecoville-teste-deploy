@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaRequestDto;
 import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoColetaResponseDto;
-import senai.lab365.futurodev.ecoville_back.entity.SolicitacaoColeta;
+import senai.lab365.futurodev.ecoville_back.dtos.SolicitacaoValidacaoRequestDto;
 import senai.lab365.futurodev.ecoville_back.service.SolicitacaoColetaService;
 
 import java.util.List;
@@ -46,8 +46,8 @@ public class SolicitacaoColetaController {
     }
 
     @PatchMapping("/{id}/finalizar")
-    public ResponseEntity<SolicitacaoColetaResponseDto> finalizar(@PathVariable Integer id) {
-        return ResponseEntity.ok(solicitacaoService.finalizarSolicitacao(id));
+    public ResponseEntity<SolicitacaoColetaResponseDto> finalizar(@PathVariable Integer id, @RequestBody SolicitacaoValidacaoRequestDto validacaoDto) {
+        return ResponseEntity.ok(solicitacaoService.finalizarSolicitacao(id, validacaoDto));
     }
 
     @PatchMapping("/{id}/feedback")
