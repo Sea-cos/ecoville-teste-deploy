@@ -1,0 +1,162 @@
+.solicitacao-container {
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fdfdfd;
+
+}
+
+.solicitacao-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2e7d32;
+
+}
+
+.solicitacao-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.materiais-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+
+}
+
+.material-card {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+}
+
+.material-card h3 {
+    margin-bottom: 10px;
+    color: #2e7d32;
+}
+
+.quantidade-control{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.quantidade-control button {
+    background: #2e7d32;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.quantidade-control button:hover {
+    background: #1b4d1a;
+}
+.quantidade-control span {
+    font-weight: bold;
+    color: #1b4d1a;
+}
+.estado input[type="radio"]{
+    
+    margin-right: 5px;
+    background-color: #ffffff;
+    color: #1b4d1a;
+    border: 1px solid #ccc;
+    accent-color: #2e7d32;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #2e7d32;
+
+
+}
+.estado{
+    color: #000;
+    display: flex;
+flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+   
+}
+
+
+.estado p{
+    color: #1b4d1a;
+    font-weight: bold;
+    margin: 10px 0 5px;
+
+}
+
+.estado label{
+    margin-right: 15px;
+    font-size: 14px;
+    color: #1b4d1a;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #1b4d1a;
+}
+.form-group [type="date"]{
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+  background-color:#ffffff;
+    color: #2e7d32;
+    accent-color: #2e7d32;
+       
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+  background-color:#ffffff;
+}
+
+textarea{
+    resize: none;
+    height: 80px;
+    color: #2e7d32;
+}
+
+.btn-cadastrar {
+    background: #2e7d32;
+    color: white;
+    padding: 17px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-cadastrar:hover {
+    background: #1b4d1a;
+}

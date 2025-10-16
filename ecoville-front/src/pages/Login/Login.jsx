@@ -1,27 +1,25 @@
 import React, { useState } from "react";
-import plantaLogin from "../../assets/planta-login.jpg";
 import { ToastContainer, toast } from "react-toastify";
 import { Navigate, useNavigate, Link } from "react-router";
 import LoginLogo from "../../assets/logo.png";
 
-import "./Login.css"
+import "./Login.css";
 
 function LoginPage() {
-
-  const [email, setEmail] = useState("");
+  const [usuario, setUsuario] = useState("");
   const [senha, setSenha] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-     e.preventDefault();
+    e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch("http://localhost:8080/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: email,
+          nomeDeUsuario: usuario,
           senha: senha,
         }),
       });
@@ -30,9 +28,12 @@ function LoginPage() {
 
       if (response.ok) {
         toast.success("Login realizado com sucesso");
-        // TODO: Armazenar o tipo de usuário no localStorage quando o backend retornar essa informação (ver issue #10)
-        localStorage.setItem("usuarioID", data.usuario.id); 
-        navigate("/dashboard");
+        console.log(response);
+        localStorage.setItem("tipoPerfil", data.perfil);
+        localStorage.setItem("user", usuario);
+        localStorage.setItem("senha", senha);
+        localStorage.setItem("userID", data.id);
+        navigate("/home");
       } else {
         toast.warning("Credenciais inválidas!!");
       }
@@ -40,6 +41,7 @@ function LoginPage() {
       console.log("Resposta:", data);
     } catch (error) {
       console.log(error);
+
       toast.error("Erro no consumo da api");
     }
   };
@@ -48,7 +50,7 @@ function LoginPage() {
     <div className="cadastro-container">
       <div className="cadastro-box-lg">
         <div className="cadastro-banner">
-          <img src={plantaLogin} alt="Banner" />
+          <img className src="/imagem.avif" alt="Banner" />
         </div>
         <div className="cadastro-form">
           <img
@@ -62,15 +64,15 @@ function LoginPage() {
             }}
           />
           <h2>
-            Bem vindo ao <span style={{ color: "#28a745" }}>Recicla365!</span>
+            Bem vindo ao <span style={{ color: "#28a745" }}>EcoVille!</span>
           </h2>
-          <p>Sua plataforma de gerenciamento sustentável.</p>
+          <p>Gerenciamento eficaz de suas coletas.</p>
           <form onSubmit={handleLogin}>
             <input
-              type="email"
-              placeholder="E-mail"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              placeholder="Usuario"
+              value={usuario}
+              onChange={(e) => setUsuario(e.target.value)}
             />
             <input
               type="password"
@@ -81,7 +83,9 @@ function LoginPage() {
             <button type="submit">Acessar</button>
           </form>
           <div style={{ marginTop: 16 }}>
-            <Link to="/criar-conta">Criar conta</Link>
+            <Link to="/criar-conta" className="btn-secundario">
+              Criar conta
+            </Link>
           </div>
         </div>
       </div>

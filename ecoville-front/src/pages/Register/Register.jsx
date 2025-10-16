@@ -174,7 +174,7 @@ function Register() {
         longitude,
       },
     };
-    console.log(payload)
+    console.log(payload);
     try {
       const response = await fetch("http://localhost:8080/api/usuarios", {
         method: "POST",
@@ -191,8 +191,15 @@ function Register() {
         setConfirmarSenha("");
         navigate("/");
       } else {
-        const errorData = await response.json();
-        toast.warning(`Erro: ${errorData.erro}`);
+        const errorText = await response.text();
+        let errorMsg = "Erro ao cadastrar usuário.";
+        try {
+          const errorData = JSON.parse(errorText);
+          errorMsg = errorData.erro || errorMsg;
+        } catch {
+          if (errorText) errorMsg = errorText;
+        }
+        toast.warning(`Erro: ${errorMsg}`);
       }
     } catch (error) {
       console.error("Erro:", error);
@@ -298,18 +305,20 @@ function Register() {
             <div className="section-geo">
               <input
                 type="number"
-                step="any"
-                placeholder="Latitude"
+                step="0.000001"
+                placeholder="Latitude (-27.593500)"
                 value={latitude}
                 onChange={(e) => setLatitude(e.target.value)}
+                required
               />
 
               <input
                 type="number"
-                step="any"
-                placeholder="Longitude"
+                step="0.000001"
+                placeholder="Longitude (-48.558500)"
                 value={longitude}
                 onChange={(e) => setLongitude(e.target.value)}
+                required
               />
 
               <button onClick={handleLocalizar}>Localizar</button>
@@ -338,9 +347,7 @@ function Register() {
                 Confirmo que essa é a localização informada
               </label>
             </div>
-            <button type="submit">
-              Cadastrar
-            </button>
+            <button type="submit">Cadastrar</button>
           </form>
         </div>
       </div>

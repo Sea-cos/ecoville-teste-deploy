@@ -55,3 +55,28 @@
 .delete-btn:hover {
   background-color: #c62828;
 }
+
+.btn-card{
+    margin-top: auto;
+  padding: 8px 12px;
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.btn-card:hover{
+  background-color: #1b5e20;
+}
+
+.card-actions{
+  display: flex;
+  justify-content: space-evenly
+}

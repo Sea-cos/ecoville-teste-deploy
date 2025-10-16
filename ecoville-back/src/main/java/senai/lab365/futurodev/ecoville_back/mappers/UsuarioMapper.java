@@ -10,7 +10,6 @@ public class UsuarioMapper {
         return new UsuarioResponseDto(
                 usuario.getId(),
                 usuario.getNomeDeUsuario(),
-                usuario.getSenha(),
                 usuario.getPerfil(),
                 usuario.getIdEndereco()
         );
