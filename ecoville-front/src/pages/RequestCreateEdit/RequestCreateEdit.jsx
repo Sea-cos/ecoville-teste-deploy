@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import Menu from "../../components/Menu/Menu.jsx";
 import { Add, Remove } from "@mui/icons-material";
 import { ToastContainer, toast } from "react-toastify";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./RequestCreateEdit.css";
 import { useSolicitacoes } from "../../hooks/useSolicitacoes.js";
 
 export default function RequestCreateEdit() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const { solicitacoes } = useSolicitacoes();
   const [materiais, setMateriais] = useState([
@@ -157,6 +158,7 @@ export default function RequestCreateEdit() {
           { tipo: "PAPEL", quantidade: 0, estado: "" },
           { tipo: "METAL", quantidade: 0, estado: "" },
         ]);
+        navigate("/solicitacoes")
       } else {
         const errorText = await response.text();
         toast.error("Erro: " + errorText);
