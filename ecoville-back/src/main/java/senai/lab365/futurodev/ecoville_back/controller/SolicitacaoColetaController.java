@@ -37,8 +37,8 @@ public class SolicitacaoColetaController {
         return ResponseEntity.ok(solicitacoes);
     }
 
-    @PutMapping("/{idSolicitacao}")
-    public ResponseEntity<SolicitacaoColetaUpdateResponseDto> feedback(@PathVariable Integer idSolicitacao,
+    @PatchMapping("/{idSolicitacao}/atualizar")
+    public ResponseEntity<SolicitacaoColetaUpdateResponseDto> editar(@PathVariable Integer idSolicitacao,
                                                                        @RequestBody SolicitacaoColetaUpdateRequestDto dto) {
         return ResponseEntity.ok(solicitacaoService.atualizar(idSolicitacao, dto));
     }

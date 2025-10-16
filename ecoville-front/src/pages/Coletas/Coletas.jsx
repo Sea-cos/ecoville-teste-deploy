@@ -2,7 +2,6 @@ import Menu from "../../components/Menu/Menu.jsx";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "./Coletas.css";
-import { useNavigate } from "react-router";
 import CardColetor from "../../components/Cards/CardColetor.jsx";
 
 const Coletas = () => {
@@ -125,12 +124,6 @@ const Coletas = () => {
     }
   };
 
-  const navigate = useNavigate();
-
-  const cadastrar = () => {
-    navigate("/locais/novo");
-  };
-
   const fetchColetas = async () => {
     try {
       const response = await fetch(
@@ -190,7 +183,13 @@ const Coletas = () => {
         </div>
 
         <div className="div-cards">
-          {solicitacoesFiltradas.map((sol) => (
+          {solicitacoesFiltradas
+                      .slice()
+            .sort(
+              (a, b) =>
+                new Date(b.dataSolicitacao) - new Date(a.dataSolicitacao)
+            )
+          .map((sol) => (
             <CardColetor
               key={sol.id}
               solicitacao={sol}

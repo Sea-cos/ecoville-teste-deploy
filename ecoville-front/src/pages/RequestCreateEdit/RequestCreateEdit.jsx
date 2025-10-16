@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Menu from "../../components/Menu/Menu.jsx";
 import { Add, Remove } from "@mui/icons-material";
 import { ToastContainer, toast } from "react-toastify";
+import { useNavigate, useParams } from "react-router-dom";
 import "./RequestCreateEdit.css";
+import { useSolicitacoes } from "../../hooks/useSolicitacoes.js";
 
 export default function RequestCreateEdit() {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const { solicitacoes } = useSolicitacoes();
   const [materiais, setMateriais] = useState([
-    { tipo: "PLASTICO", quantidade: 0 },
-    { tipo: "VIDRO", quantidade: 0 },
-    { tipo: "PAPEL", quantidade: 0 },
-    { tipo: "METAL", quantidade: 0 },
+    { tipo: "PLASTICO", quantidade: 0, estado: "" },
+    { tipo: "VIDRO", quantidade: 0, estado: "" },
+    { tipo: "PAPEL", quantidade: 0, estado: "" },
+    { tipo: "METAL", quantidade: 0, estado: "" },
   ]);
 
   const [dataColeta, setDataColeta] = useState("");
@@ -34,12 +39,44 @@ export default function RequestCreateEdit() {
     setMateriais(novosMateriais);
   };
 
+  useEffect(() => {
+    if (id) {
+      const coleta = solicitacoes.find((c) => c.id === Number(id));
+      if (coleta) {
+        // Cria um clone da estrutura inicial
+        const materiaisBase = [
+          { tipo: "PLASTICO", quantidade: 0 },
+          { tipo: "VIDRO", quantidade: 0 },
+          { tipo: "PAPEL", quantidade: 0 },
+          { tipo: "METAL", quantidade: 0 },
+        ];
+        console.log(coleta.itens);
+
+        // Preenche os valores vindos do back
+        const materiaisAtualizados = materiaisBase.map((mat) => {
+          const item = coleta.itens.find((i) => i.tipo === mat.tipo);
+          return {
+            ...mat,
+            quantidade: item ? item.quantidadeEstimadaKg : 0,
+            estado: item ? item.estado : "",
+          };
+        });
+
+        setMateriais(materiaisAtualizados);
+        setDataColeta(coleta.dataAgendada?.split("T")[0] || ""); // garante formato yyyy-MM-dd
+        setObservacao(coleta.observacoes || "");
+      }
+    }
+  }, [id, solicitacoes]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const usuarioId = localStorage.getItem("userID");
+    const user = localStorage.getItem("user");
+    const senha = localStorage.getItem("senha");
     const hoje = new Date().toLocaleDateString("en-CA");
     const dataSelecionada = dataColeta;
-    console.log("Hoje:" + hoje + " selecionada: " + dataSelecionada);
 
     if (dataSelecionada < hoje) {
       toast.warning("A data da coleta deve ser hoje ou uma data futura.");
@@ -79,34 +116,55 @@ export default function RequestCreateEdit() {
       itens,
     };
 
-    console.log(dadosSolicitacao);
-
-    //TODO: Implementar JWT (issue #17)
-    const usuarioId = localStorage.getItem("userID");
-    const user = localStorage.getItem("user");
-    const senha = localStorage.getItem("senha");
-
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/coletas?usuarioId=${usuarioId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Basic " + btoa(user + ":" + senha),
-          },
-          body: JSON.stringify(dadosSolicitacao),
-        }
-      );
+      let response;
+
+      if (id) {
+        console.log("ID", id);
+        response = await fetch(
+          `http://localhost:8080/api/coletas/${id}/atualizar`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Basic " + btoa(user + ":" + senha),
+            },
+            body: JSON.stringify(dadosSolicitacao),
+          }
+        );
+      } else {
+        response = await fetch(
+          `http://localhost:8080/api/coletas?usuarioId=${usuarioId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Basic " + btoa(user + ":" + senha),
+            },
+            body: JSON.stringify(dadosSolicitacao),
+          }
+        );
+      }
 
       if (response.ok) {
-        toast.success("Solicitação registrada!");
+        toast.success(
+          id ? "Solicitação atualizada!" : "Solicitação registrada!"
+        );
+        setObservacao("");
+        setDataColeta("");
+        setMateriais([
+          { tipo: "PLASTICO", quantidade: 0, estado: "" },
+          { tipo: "VIDRO", quantidade: 0, estado: "" },
+          { tipo: "PAPEL", quantidade: 0, estado: "" },
+          { tipo: "METAL", quantidade: 0, estado: "" },
+        ]);
+        navigate("/solicitacoes")
       } else {
         const errorText = await response.text();
         toast.error("Erro: " + errorText);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Erro", error);
     }
   };
 
@@ -114,7 +172,7 @@ export default function RequestCreateEdit() {
     <>
       <Menu />
       <div className="solicitacao-container">
-        <h2>Solicitação de Coleta de Materiais Recicláveis</h2>
+        <h2>{id ? "Editar solicitação" : "Nova Solicitação"}</h2>
         <form onSubmit={handleSubmit} className="solicitacao-form">
           <div className="materiais-grid">
             {materiais.map((material, index) => (
@@ -193,7 +251,7 @@ export default function RequestCreateEdit() {
             />
           </div>
           <button type="submit" className="btn-cadastrar">
-            Enviar Solicitação
+            {id ? "Salvar Alterações" : "Cadastrar"}
           </button>
         </form>
       </div>

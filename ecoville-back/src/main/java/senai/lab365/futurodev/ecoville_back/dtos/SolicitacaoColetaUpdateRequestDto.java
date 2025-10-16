@@ -8,13 +8,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record SolicitacaoColetaUpdateRequestDto(
-        Integer idUsuarioResidencial,
-        Integer idColetor,
-        LocalDateTime dataSolicitacao,
         LocalDate dataAgendada,
         String observacoes,
-        StatusColeta status,
-        String feedback,
-        List<ItemColetaRequestDto> itens
+        List<ItemColetaUpdRequestDto> itens
 ) {
 }

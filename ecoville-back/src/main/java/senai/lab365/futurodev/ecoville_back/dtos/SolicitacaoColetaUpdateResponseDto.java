@@ -10,7 +10,6 @@ import java.util.List;
 public record SolicitacaoColetaUpdateResponseDto(
         Integer idSolicitacao,
         Integer idUsuarioResidencial,
-        Integer idColetor,
         LocalDateTime dataSolicitacao,
         LocalDate dataAgendada,
         String observacoes,
