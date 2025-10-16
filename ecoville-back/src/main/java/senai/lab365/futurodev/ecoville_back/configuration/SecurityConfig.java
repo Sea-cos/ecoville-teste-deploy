@@ -50,6 +50,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/usuarios", "/api/login").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/coletas/*/atualizar").hasAuthority("RESIDENCIAL")
+                        .requestMatchers(HttpMethod.PATCH, "/api/coletas/*/cancelar").hasAuthority("RESIDENCIAL")
                         .requestMatchers(HttpMethod.PATCH, "/api/coletas/**").hasAuthority("COLETOR")
                         .anyRequest().authenticated()
                 )
