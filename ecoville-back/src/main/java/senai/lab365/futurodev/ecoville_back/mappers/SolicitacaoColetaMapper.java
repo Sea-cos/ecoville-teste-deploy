@@ -22,7 +22,6 @@ public class SolicitacaoColetaMapper {
         return new SolicitacaoColetaUpdateResponseDto(
                 solicitacao.getId(),
                 solicitacao.getUsuarioResidencial().getId(),
-                solicitacao.getColetor().getId(),
                 solicitacao.getDataSolicitacao(),
                 solicitacao.getDataAgendada(),
                 solicitacao.getObservacoes(),

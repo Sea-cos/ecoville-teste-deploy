@@ -5,10 +5,11 @@ import CardPonto from "../../components/Cards/CardResidente.jsx";
 import "./Solicitacoes.css";
 import { useNavigate } from "react-router";
 import CardResidente from "../../components/Cards/CardResidente.jsx";
+import { useSolicitacoes } from "../../hooks/useSolicitacoes.js";
 
 const Solicitacoes = () => {
   const navigate = useNavigate();
-  const [solicitacoes, setSolicitacoes] = useState([]);
+  const { solicitacoes, setSolicitacoes } = useSolicitacoes();
   const [openModal, setOpenModal] = useState(false);
   const userID = localStorage.getItem("userID");
   const user = localStorage.getItem("user") || "marcos";

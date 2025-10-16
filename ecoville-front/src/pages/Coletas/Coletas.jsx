@@ -2,7 +2,7 @@ import Menu from "../../components/Menu/Menu.jsx";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "./Coletas.css";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 import CardColetor from "../../components/Cards/CardColetor.jsx";
 
 const Coletas = () => {
@@ -125,11 +125,11 @@ const Coletas = () => {
     }
   };
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const cadastrar = () => {
-    navigate("/locais/novo");
-  };
+  // const cadastrar = () => {
+  //   navigate("/locais/novo");
+  // };
 
   const fetchColetas = async () => {
     try {

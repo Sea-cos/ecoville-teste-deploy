@@ -112,39 +112,32 @@ public SolicitacaoColetaResponseDto criarSolicitacao(Integer usuarioId, Solicita
 
     @Transactional
     public SolicitacaoColetaUpdateResponseDto atualizar(Integer idSolicitacao, SolicitacaoColetaUpdateRequestDto dto) {
-        SolicitacaoColeta solicitacao = solicitacaoRepository.findById(idSolicitacao)
-                .orElseThrow();
+    SolicitacaoColeta solicitacao = solicitacaoRepository.findById(idSolicitacao)
+            .orElseThrow(() -> new RuntimeException("Solicitação não encontrada."));
 
-        solicitacao.setUsuarioResidencial(usuarioRepository.findById(dto.idUsuarioResidencial())
-                .orElseThrow(()->new RuntimeException("Usuario residencial não encontrado.")));
-        solicitacao.setColetor(usuarioRepository.findById(dto.idColetor())
-                .orElseThrow(()->new RuntimeException("Usuario coletor não encontrado.")));
-        solicitacao.setDataSolicitacao(dto.dataSolicitacao());
+    if (dto.dataAgendada() != null){
         solicitacao.setDataAgendada(dto.dataAgendada());
+    }
+
+    if (dto.observacoes() != null){
         solicitacao.setObservacoes(dto.observacoes());
-        solicitacao.setStatus(dto.status());
-        solicitacao.setFeedback(dto.feedback());
+    }
 
-
-        List<ItemColeta> itens = new ArrayList<>();
-
-        if (dto.itens() != null) {
-            for (ItemColetaRequestDto itemColetaDTO : dto.itens()) {
+        if (dto.itens() != null){
+            List<ItemColeta> itens = new ArrayList<>();
+            for (ItemColetaUpdRequestDto itemDto : dto.itens()) {
                 ItemColeta item = new ItemColeta();
-                item.setTipo(itemColetaDTO.tipo());
-                item.setQuantidadeEstimadaKg(itemColetaDTO.quantidadeEstimadaKg());
-                item.setQuantidadeValidadaKg(itemColetaDTO.quantidadeValidadaKg());
-                item.setEstado(itemColetaDTO.estado());
+                item.setTipo(itemDto.tipo());
+                item.setEstado(itemDto.estado());
+                item.setQuantidadeEstimadaKg(itemDto.quantidadeEstimadaKg());
                 item.setSolicitacaoColeta(solicitacao);
                 itens.add(item);
             }
+
+            solicitacao.getItems().clear();
+            solicitacao.getItems().addAll(itens);
         }
-
-        solicitacao.getItems().clear();
-        solicitacao.getItems().addAll(itens);
-
         solicitacao = solicitacaoRepository.save(solicitacao);
-
         return SolicitacaoColetaMapper.toDtoUpdate(solicitacao);
 
     }
